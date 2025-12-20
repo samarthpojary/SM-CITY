@@ -34,4 +34,13 @@ class User
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         return $user ?: null;
     }
+
+    public static function allByRole(string|array $roles): array
+    {
+        $roles = is_array($roles) ? $roles : [$roles];
+        $placeholders = str_repeat('?,', count($roles) - 1) . '?';
+        $stmt = DB::conn()->prepare("SELECT * FROM users WHERE role IN ($placeholders) ORDER BY created_at DESC");
+        $stmt->execute($roles);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

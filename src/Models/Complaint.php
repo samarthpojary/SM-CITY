@@ -48,6 +48,11 @@ class Complaint
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function allWithUsers(): array
+    {
+        $stmt = DB::conn()->query('SELECT c.*, u.name as user_name FROM complaints c LEFT JOIN users u ON c.user_id = u.id ORDER BY c.created_at DESC');
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public static function updateStatus(int $id, string $status)
     {
         $stmt = DB::conn()->prepare('UPDATE complaints SET status = :status WHERE id = :id');
@@ -79,10 +84,14 @@ class Complaint
         $stmt = DB::conn()->query('SELECT priority, COUNT(*) as count FROM complaints GROUP BY priority');
         $priorityStats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
+        $stmt = DB::conn()->query('SELECT role, COUNT(*) as count FROM users GROUP BY role');
+        $userStats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
         return [
             'status' => $statusStats,
             'category' => $categoryStats,
             'priority' => $priorityStats,
+            'users' => $userStats,
             'total' => array_sum($statusStats),
         ];
     }

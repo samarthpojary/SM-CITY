@@ -2,6 +2,14 @@
 // Basic bootstrap
 session_start();
 
+// Session timeout (30 minutes)
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
+    session_destroy();
+    header('Location: ' . (isset($_SERVER['HTTP_HOST']) ? 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/' : '/'));
+    exit;
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
 // Simple autoloader
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
@@ -41,16 +49,25 @@ function env($key, $default = null) {
     return $_ENV[$key] ?? $default;
 }
 
-function view($template, $data = []) {
+function base_url() {
+    return rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+}
+
+function project_base_url() {
+    return dirname(base_url());
+}
+
+function view($template, $data = [], $layout = 'layout.php') {
     extract($data);
     $tileUrl = env('LEAFLET_TILE_URL');
     $tileAttr = env('LEAFLET_ATTRIBUTION');
-    $template = $template;
-    include __DIR__ . '/Views/layout.php';
+    $base = base_url();
+    $dashboard_url = '/' . ($_SESSION['user']['role'] ?? 'citizen') . '/dashboard';
+    include __DIR__ . '/Views/' . $layout;
 }
 
 function redirect($path) {
-    header('Location: ' . $path);
+    header('Location: ' . base_url() . $path);
     exit;
 }
 

@@ -12,22 +12,6 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-800">
-  <nav class="bg-white shadow">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-      <a href="<?= dirname($base) ?>/" class="text-xl font-semibold">AI Smart City</a>
-      <div class="space-x-4">
-        <a class="hover:underline" href="<?= dirname($base) ?>/">Home</a>
-        <a class="hover:underline" href="<?= $base ?>/complaints">Complaints</a>
-        <?php if (empty($_SESSION['user'])): ?>
-        <a class="hover:underline" href="<?= $base ?>/login">Login</a>
-        <a class="hover:underline" href="<?= $base ?>/register">Register</a>
-        <?php else: ?>
-        <a class="hover:underline" href="<?= $dashboard_url ?>">Dashboard</a>
-        <a class="hover:underline" href="<?= $base ?>/logout">Logout</a>
-        <?php endif; ?>
-      </div>
-    </div>
-  </nav>
 
   <main class="max-w-6xl mx-auto p-4">
     <?php if (!empty($_SESSION['flash'])): ?>

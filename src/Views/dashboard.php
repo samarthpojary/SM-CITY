@@ -20,18 +20,32 @@
     <div class="text-2xl font-bold text-red-600"><?= $stats['priority']['High'] ?? 0 ?></div>
   </div>
 </div>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+  <div class="bg-white shadow p-4 rounded">
+    <div class="text-gray-500">Citizens</div>
+    <div class="text-2xl font-bold text-blue-600"><?= $stats['users']['citizen'] ?? 0 ?></div>
+  </div>
+  <div class="bg-white shadow p-4 rounded">
+    <div class="text-gray-500">Authorities</div>
+    <div class="text-2xl font-bold text-green-600"><?= $stats['users']['officer'] ?? 0 ?></div>
+  </div>
+  <div class="bg-white shadow p-4 rounded">
+    <div class="text-gray-500">Admins</div>
+    <div class="text-2xl font-bold text-purple-600"><?= $stats['users']['admin'] ?? 0 ?></div>
+  </div>
+</div>
 <?php endif; ?>
 
 <div class="grid md:grid-cols-3 gap-4 mb-6">
-  <a href="/complaints/new" class="block bg-white shadow p-4 rounded hover:shadow-md">
+  <a href="<?= $base ?>/complaints/new" class="block bg-white shadow p-4 rounded hover:shadow-md">
     <div class="text-gray-500">Create</div>
     <div class="text-xl">New Complaint</div>
   </a>
-  <a href="/complaints" class="block bg-white shadow p-4 rounded hover:shadow-md">
+  <a href="<?= $base ?>/complaints" class="block bg-white shadow p-4 rounded hover:shadow-md">
     <div class="text-gray-500">View</div>
     <div class="text-xl">My/All Complaints</div>
   </a>
-  <a href="/" class="block bg-white shadow p-4 rounded hover:shadow-md">
+  <a href="<?= $base ?>/" class="block bg-white shadow p-4 rounded hover:shadow-md">
     <div class="text-gray-500">Map</div>
     <div class="text-xl">City Map</div>
   </a>
@@ -41,7 +55,7 @@
   <div class="p-4 border-b font-semibold">Recent Complaints</div>
   <div class="divide-y">
   <?php foreach ($items as $c): ?>
-    <a class="block p-4 hover:bg-gray-50" href="/complaints/view?id=<?= $c['id'] ?>">
+    <a class="block p-4 hover:bg-gray-50" href="<?= $base ?>/complaints/view?id=<?= $c['id'] ?>">
       <div class="font-medium">#<?= $c['id'] ?> - <?= htmlspecialchars($c['title']) ?></div>
       <div class="text-sm text-gray-600"><?= htmlspecialchars($c['category']) ?> | <?= htmlspecialchars($c['priority']) ?> | <?= htmlspecialchars($c['status']) ?></div>
     </a>

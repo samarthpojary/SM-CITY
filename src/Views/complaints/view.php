@@ -19,7 +19,7 @@
 
   <?php if (!empty($_SESSION['user']) && in_array($_SESSION['user']['role'], ['admin','officer'])): ?>
   <div class="border-t pt-4 mt-4">
-    <form method="POST" action="/complaints/update-status" class="flex items-end gap-3">
+    <form method="POST" action="<?= $base ?>/complaints/update-status" class="flex items-end gap-3">
       <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
       <input type="hidden" name="id" value="<?= $c['id'] ?>" />
       <div>
@@ -33,7 +33,7 @@
       <button class="bg-indigo-600 text-white px-4 py-2 rounded" type="submit">Update</button>
     </form>
 
-    <form method="POST" action="/complaints/resolve" enctype="multipart/form-data" class="flex items-end gap-3 mt-4">
+    <form method="POST" action="<?= $base ?>/complaints/resolve" enctype="multipart/form-data" class="flex items-end gap-3 mt-4">
       <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
       <input type="hidden" name="id" value="<?= $c['id'] ?>" />
       <div>

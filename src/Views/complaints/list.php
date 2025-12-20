@@ -1,11 +1,11 @@
 <?php $items = $complaints ?? []; ?>
 <div class="flex justify-between items-center mb-4">
   <h2 class="text-2xl font-semibold">Complaints</h2>
-  <a href="/complaints/new" class="bg-blue-600 text-white px-4 py-2 rounded">New</a>
+  <a href="<?= $base ?>/complaints/new" class="bg-blue-600 text-white px-4 py-2 rounded">New</a>
 </div>
 <div class="bg-white rounded shadow divide-y">
   <?php foreach ($items as $c): ?>
-    <a class="block p-4 hover:bg-gray-50" href="/complaints/view?id=<?= $c['id'] ?>">
+    <a class="block p-4 hover:bg-gray-50" href="<?= $base ?>/complaints/view?id=<?= $c['id'] ?>">
       <div class="flex justify-between items-center">
         <div>
           <div class="font-medium">#<?= $c['id'] ?> - <?= htmlspecialchars($c['title']) ?></div>

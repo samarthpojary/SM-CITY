@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI-Powered Smart City Complaint & Issue Resolution System
 
 ## Setup Instructions
@@ -94,3 +95,6 @@ SM-City/
 - Real-time notifications
 - Analytics dashboard
 - Multilingual support
+=======
+# SM-CITY
+>>>>>>> 45a00ea78c5b1694f73762bb3400211713485cb1

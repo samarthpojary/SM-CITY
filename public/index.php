@@ -22,12 +22,17 @@ $router->get('/logout', [AuthController::class, 'logout']);
 
 // Authenticated routes
 $router->get('/dashboard', [DashboardController::class, 'index']);
+$router->get('/admin/dashboard', [DashboardController::class, 'adminDashboard']);
+$router->get('/officer/dashboard', [DashboardController::class, 'officerDashboard']);
+$router->get('/citizen/dashboard', [DashboardController::class, 'citizenDashboard']);
 $router->get('/complaints/new', [ComplaintController::class, 'create']);
 $router->post('/complaints', [ComplaintController::class, 'store']);
 $router->get('/complaints', [ComplaintController::class, 'list']);
 $router->get('/complaints/view', [ComplaintController::class, 'view']);
 $router->post('/complaints/update-status', [ComplaintController::class, 'updateStatus']);
 $router->post('/complaints/resolve', [ComplaintController::class, 'resolve']);
+$router->get('/profile', [ProfileController::class, 'show']);
+$router->post('/profile', [ProfileController::class, 'update']);
 
 try {
     $router->dispatch();

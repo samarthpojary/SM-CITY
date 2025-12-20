@@ -1,6 +1,6 @@
 <div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
   <h2 class="text-xl font-semibold mb-4">Submit Complaint</h2>
-  <form method="POST" action="/complaints" enctype="multipart/form-data" class="space-y-4">
+  <form method="POST" action="<?= $base ?>/complaints" enctype="multipart/form-data" class="space-y-4">
     <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
     <div>
       <label class="block text-sm mb-1">Title</label>

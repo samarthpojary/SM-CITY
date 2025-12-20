@@ -7,7 +7,6 @@ class AuthController
 {
     public function showLogin()
     {
-        if (!empty($_SESSION['user'])) return redirect('/dashboard');
         $template = __DIR__ . '/../Views/auth/login.php';
         view($template, ['title' => 'Login']);
     }
@@ -22,18 +21,31 @@ class AuthController
             $_SESSION['flash'] = 'Invalid credentials';
             return redirect('/login');
         }
+
+        $requestedRole = $_POST['role'] ?? null;
+        if ($requestedRole && $user['role'] !== $requestedRole) {
+            $_SESSION['flash'] = 'Access denied. Please use the correct login portal for your role.';
+            return redirect('/login' . ($requestedRole ? '?role=' . $requestedRole : ''));
+        }
+
         $_SESSION['user'] = [
             'id' => $user['id'],
             'name' => $user['name'],
             'email' => $user['email'],
             'role' => $user['role'],
         ];
-        redirect('/dashboard');
+        session_regenerate_id(true);
+        if ($user['role'] === 'admin') {
+            redirect('/admin/dashboard');
+        } elseif ($user['role'] === 'officer') {
+            redirect('/officer/dashboard');
+        } else {
+            redirect('/citizen/dashboard');
+        }
     }
 
     public function showRegister()
     {
-        if (!empty($_SESSION['user'])) return redirect('/dashboard');
         $template = __DIR__ . '/../Views/auth/register.php';
         view($template, ['title' => 'Register']);
     }
@@ -63,13 +75,15 @@ class AuthController
 
         $id = User::create(compact('name','email','password','role'));
         $_SESSION['user'] = ['id'=>$id,'name'=>$name,'email'=>$email,'role'=>$role];
+        session_regenerate_id(true);
         $_SESSION['flash'] = 'Registration successful! Welcome to the Smart City platform.';
-        redirect('/dashboard');
+        redirect('/citizen/dashboard');
     }
 
     public function logout()
     {
         session_destroy();
-        redirect('/');
+        header('Location: ' . project_base_url() . '/');
+        exit;
     }
 }

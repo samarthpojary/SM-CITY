@@ -14,8 +14,9 @@
   echo $roleMessage;
   ?>
 
-  <form method="POST" action="/login" class="space-y-4">
+  <form method="POST" action="<?= $base ?>/login" class="space-y-4">
     <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
+    <input type="hidden" name="role" value="<?= htmlspecialchars($_GET['role'] ?? '') ?>">
     <div>
       <label class="block text-sm mb-1">Email</label>
       <input class="w-full border rounded px-3 py-2" type="email" name="email" required />
@@ -30,7 +31,7 @@
   <div class="mt-4 text-center">
     <p class="text-sm text-gray-600">
       Don't have an account?
-      <a href="/register" class="text-blue-600 hover:underline">Register here</a>
+      <a href="<?= $base ?>/register" class="text-blue-600 hover:underline">Register here</a>
     </p>
   </div>
 </div>

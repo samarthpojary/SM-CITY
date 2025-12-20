@@ -4,8 +4,8 @@
     <h1 class="text-3xl font-bold mb-2">AI-Powered Smart City Complaint System</h1>
     <p class="text-gray-600 mb-4">Report issues like garbage, potholes, water leakage, drainage, and streetlights. Track status and view them on the map.</p>
     <div class="space-x-3">
-      <a href="/register" class="bg-blue-600 text-white px-4 py-2 rounded">Get Started</a>
-      <a href="/complaints" class="bg-gray-200 px-4 py-2 rounded">Browse Complaints</a>
+      <a href="<?= $base ?>/register" class="bg-blue-600 text-white px-4 py-2 rounded">Get Started</a>
+      <a href="<?= $base ?>/complaints" class="bg-gray-200 px-4 py-2 rounded">Browse Complaints</a>
     </div>
   </div>
   <div>

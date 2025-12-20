@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,9 +33,14 @@
                     <a href="public/" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                         View Public Map
                     </a>
-                    <!-- <a href="create_admin.php" class="bg-purple-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700">
-                        Create Admin
-                    </a> -->
+                    <?php if (!empty($_SESSION['user'])): ?>
+                    <a href="public/<?php echo $_SESSION['user']['role']; ?>/dashboard" class="bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+                        Go to Dashboard
+                    </a>
+                    <a href="public/logout" class="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium">
+                        Logout
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
