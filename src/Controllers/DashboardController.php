@@ -19,8 +19,8 @@ class DashboardController
         $user = $_SESSION['user'];
         if ($user['role'] === 'admin') {
             return $this->adminDashboard();
-        } elseif ($user['role'] === 'officer') {
-            return $this->officerDashboard();
+        } elseif ($user['role'] === 'authority') {
+            return $this->authorityDashboard();
         } else {
             return $this->citizenDashboard();
         }
@@ -33,14 +33,14 @@ class DashboardController
         $user = $_SESSION['user'];
         $stats = Complaint::stats();
         $users = User::allByRole('citizen');
-        $authorities = User::allByRole(['officer', 'admin']);
+        $authorities = User::allByRole(['authority', 'admin']);
         $allComplaints = Complaint::allWithUsers();
         view($template, ['title' => 'Admin Dashboard', 'user' => $user, 'stats' => $stats, 'users' => $users, 'authorities' => $authorities, 'allComplaints' => $allComplaints]);
     }
 
-    public function officerDashboard()
+    public function authorityDashboard()
     {
-        if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'officer') return redirect('/login');
+        if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'authority') return redirect('/login');
         $template = __DIR__ . '/../Views/officer_dashboard.php';
         $user = $_SESSION['user'];
         $complaints = Complaint::listForRole($user['role'], $user['id']);

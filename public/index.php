@@ -31,6 +31,8 @@ $router->get('/complaints', [ComplaintController::class, 'list']);
 $router->get('/complaints/view', [ComplaintController::class, 'view']);
 $router->post('/complaints/update-status', [ComplaintController::class, 'updateStatus']);
 $router->post('/complaints/resolve', [ComplaintController::class, 'resolve']);
+$router->post('/complaints/assign-authority', [ComplaintController::class, 'assignAuthority']);
+$router->post('/complaints/add-feedback', [ComplaintController::class, 'addFeedback']);
 $router->get('/profile', [ProfileController::class, 'show']);
 $router->post('/profile', [ProfileController::class, 'update']);
 

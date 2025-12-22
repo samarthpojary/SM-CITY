@@ -19,11 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (User::findByEmail($email)) {
         $error = 'Email already exists';
     } else {
+        $role = $_POST['role'] ?? 'admin';
         $id = User::create([
             'name' => $name,
             'email' => $email,
             'password' => $password,
-            'role' => 'admin'
+            'role' => $role
         ]);
 
         if ($id) {

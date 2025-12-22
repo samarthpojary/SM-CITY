@@ -43,4 +43,18 @@ class User
         $stmt->execute($roles);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public static function update(int $id, array $data): bool
+    {
+        $setParts = [];
+        $params = [':id' => $id];
+        foreach ($data as $key => $value) {
+            $setParts[] = "$key = :$key";
+            $params[":$key"] = $value;
+        }
+        $setClause = implode(', ', $setParts);
+        $sql = "UPDATE users SET $setClause WHERE id = :id";
+        $stmt = DB::conn()->prepare($sql);
+        return $stmt->execute($params);
+    }
 }

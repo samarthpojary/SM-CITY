@@ -96,5 +96,6 @@ SM-City/
 - Analytics dashboard
 - Multilingual support
 =======
+This project developed by Samarth P
 # SM-CITY
 >>>>>>> 45a00ea78c5b1694f73762bb3400211713485cb1

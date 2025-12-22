@@ -2,11 +2,11 @@
   <h2 class="text-xl font-semibold mb-4">Login</h2>
 
   <?php
-  $role = $_GET['role'] ?? '';
+  $role = $role ?? '';
   $roleMessage = '';
   if ($role === 'admin') {
       $roleMessage = '<div class="bg-purple-100 border border-purple-300 text-purple-700 px-4 py-2 rounded mb-4 text-sm">Logging in as Administrator</div>';
-  } elseif ($role === 'officer') {
+  } elseif ($role === 'authority') {
       $roleMessage = '<div class="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded mb-4 text-sm">Logging in as Authority Officer</div>';
   } else {
       $roleMessage = '<div class="bg-blue-100 border border-blue-300 text-blue-700 px-4 py-2 rounded mb-4 text-sm">Logging in as Citizen</div>';

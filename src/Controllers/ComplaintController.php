@@ -90,23 +90,73 @@ class ComplaintController
 
     public function updateStatus()
     {
-        $this->ensureAuth(['admin','officer']);
-        if (!csrf_verify($_POST['csrf'] ?? '')) die('CSRF failed');
+        $this->ensureAuth(['admin','authority']);
+        if (!csrf_verify($_POST['csrf'] ?? '')) {
+            $_SESSION['flash'] = 'Security check failed.';
+            return redirect('/complaints');
+        }
+
         $id = (int)($_POST['id'] ?? 0);
         $status = $_POST['status'] ?? '';
-        if ($id && $status) Complaint::updateStatus($id, $status);
+
+        if (!$id || !$status) {
+            $_SESSION['flash'] = 'Invalid request data.';
+            return redirect('/complaints');
+        }
+
+        $complaint = Complaint::find($id);
+        if (!$complaint) {
+            $_SESSION['flash'] = 'Complaint not found.';
+            return redirect('/complaints');
+        }
+
+        // Check if authority is assigned to this complaint or if admin
+        $user = $_SESSION['user'];
+        if ($user['role'] === 'authority' && $complaint['assigned_authority_id'] != $user['id']) {
+            $_SESSION['flash'] = 'You are not authorized to update this complaint.';
+            return redirect('/complaints/view?id=' . $id);
+        }
+
+        if (Complaint::updateStatus($id, $status, $user['id'])) {
+            $_SESSION['flash'] = 'Complaint status updated successfully.';
+        } else {
+            $_SESSION['flash'] = 'Failed to update complaint status.';
+        }
+
         redirect('/complaints/view?id=' . $id);
     }
 
     public function resolve()
     {
-        $this->ensureAuth(['admin','officer']);
-        if (!csrf_verify($_POST['csrf'] ?? '')) die('CSRF failed');
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) return redirect('/complaints');
+        $this->ensureAuth(['admin','authority']);
+        if (!csrf_verify($_POST['csrf'] ?? '')) {
+            $_SESSION['flash'] = 'Security check failed.';
+            return redirect('/complaints');
+        }
 
+        $id = (int)($_POST['id'] ?? 0);
         $evidencePath = null;
-        if (!empty($_FILES['evidence']['name'])) {
+
+        if (!$id) {
+            $_SESSION['flash'] = 'Invalid complaint ID.';
+            return redirect('/complaints');
+        }
+
+        $complaint = Complaint::find($id);
+        if (!$complaint) {
+            $_SESSION['flash'] = 'Complaint not found.';
+            return redirect('/complaints');
+        }
+
+        // Check authorization
+        $user = $_SESSION['user'];
+        if ($user['role'] === 'authority' && $complaint['assigned_authority_id'] != $user['id']) {
+            $_SESSION['flash'] = 'You are not authorized to resolve this complaint.';
+            return redirect('/complaints/view?id=' . $id);
+        }
+
+        // Handle file upload for evidence
+        if (isset($_FILES['evidence']) && $_FILES['evidence']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = __DIR__ . '/../../' . env('UPLOAD_DIR');
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
             $ext = pathinfo($_FILES['evidence']['name'], PATHINFO_EXTENSION);
@@ -118,8 +168,89 @@ class ComplaintController
             }
             $evidencePath = env('UPLOAD_DIR') . '/' . $safe;
         }
-        Complaint::resolve($id, $evidencePath);
+
+        if (Complaint::resolve($id, $evidencePath, $user['id'])) {
+            $_SESSION['flash'] = 'Complaint resolved successfully.';
+        } else {
+            $_SESSION['flash'] = 'Failed to resolve complaint.';
+        }
+
         redirect('/complaints/view?id=' . $id);
+    }
+
+    public function assignAuthority()
+    {
+        $this->ensureAuth(['admin']);
+        if (!csrf_verify($_POST['csrf'] ?? '')) {
+            $_SESSION['flash'] = 'Security check failed.';
+            return redirect('/complaints');
+        }
+
+        $id = (int)($_POST['complaint_id'] ?? 0);
+        $authorityId = (int)($_POST['authority_id'] ?? 0);
+
+        if (!$id || !$authorityId) {
+            $_SESSION['flash'] = 'Invalid request data.';
+            return redirect('/complaints');
+        }
+
+        $user = $_SESSION['user'];
+        if (Complaint::assignToAuthority($id, $authorityId, $user['id'])) {
+            $_SESSION['flash'] = 'Complaint assigned to authority successfully.';
+        } else {
+            $_SESSION['flash'] = 'Failed to assign complaint.';
+        }
+
+        redirect('/complaints/view?id=' . $id);
+    }
+
+    public function addFeedback()
+    {
+        $this->ensureAuth(['citizen']);
+        if (!csrf_verify($_POST['csrf'] ?? '')) {
+            $_SESSION['flash'] = 'Security check failed.';
+            return redirect('/complaints');
+        }
+
+        $complaintId = (int)($_POST['complaint_id'] ?? 0);
+        $rating = (int)($_POST['rating'] ?? 0);
+        $comment = trim($_POST['comment'] ?? '');
+
+        if (!$complaintId || $rating < 1 || $rating > 5) {
+            $_SESSION['flash'] = 'Invalid feedback data.';
+            return redirect('/complaints/view?id=' . $complaintId);
+        }
+
+        $complaint = Complaint::find($complaintId);
+        if (!$complaint) {
+            $_SESSION['flash'] = 'Complaint not found.';
+            return redirect('/complaints');
+        }
+
+        // Check if user owns this complaint and it's resolved
+        $user = $_SESSION['user'];
+        if ($complaint['user_id'] != $user['id']) {
+            $_SESSION['flash'] = 'You can only provide feedback on your own complaints.';
+            return redirect('/complaints/view?id=' . $complaintId);
+        }
+
+        if ($complaint['status'] !== 'Resolved') {
+            $_SESSION['flash'] = 'You can only provide feedback on resolved complaints.';
+            return redirect('/complaints/view?id=' . $complaintId);
+        }
+
+        // Check if feedback already exists
+        $existingFeedback = Complaint::getFeedback($complaintId);
+        $userFeedback = array_filter($existingFeedback, fn($f) => $f['user_id'] == $user['id']);
+        if (!empty($userFeedback)) {
+            $_SESSION['flash'] = 'You have already provided feedback for this complaint.';
+            return redirect('/complaints/view?id=' . $complaintId);
+        }
+
+        Complaint::addFeedback($complaintId, $user['id'], $rating, $comment ?: null);
+        $_SESSION['flash'] = 'Thank you for your feedback!';
+
+        redirect('/complaints/view?id=' . $complaintId);
     }
 
     private function ensureAuth(array $roles = [])
