@@ -1,4 +1,4 @@
-<?php
+d<?php
 namespace App\Controllers;
 
 use App\Models\User;
@@ -151,6 +151,8 @@ class AuthController
             setcookie(session_name(), '', time() - 3600, '/');
         }
 
-        redirect('/');
+        // Redirect to main page
+        header('Location: http://localhost/SM-City/');
+        exit;
     }
 }

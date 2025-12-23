@@ -59,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?= htmlspecialchars($success) ?>
             </div>
             <div class="text-center">
-                <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    Go to Login Page
+                <a href="index.php" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Go to Main Page
                 </a>
             </div>
         <?php else: ?>
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <div class="mt-6 text-center">
-                <a href="index.html" class="text-blue-600 hover:text-blue-800 text-sm">
+                <a href="index.php" class="text-blue-600 hover:text-blue-800 text-sm">
                     ← Back to Main Page
                 </a>
             </div>

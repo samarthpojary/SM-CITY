@@ -9,6 +9,7 @@ use App\Core\Router;
 use App\Controllers\AuthController;
 use App\Controllers\ComplaintController;
 use App\Controllers\DashboardController;
+use App\Controllers\ProfileController;
 
 $router = new Router();
 

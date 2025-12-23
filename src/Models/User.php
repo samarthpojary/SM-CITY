@@ -8,13 +8,15 @@ class User
 {
     public static function create(array $data): int
     {
-        $sql = 'INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)';
+        $sql = 'INSERT INTO users (name, email, password, role, phone, address) VALUES (:name, :email, :password, :role, :phone, :address)';
         $stmt = DB::conn()->prepare($sql);
         $stmt->execute([
             ':name' => $data['name'],
             ':email' => $data['email'],
             ':password' => password_hash($data['password'], PASSWORD_BCRYPT),
             ':role' => $data['role'] ?? 'citizen',
+            ':phone' => $data['phone'] ?? null,
+            ':address' => $data['address'] ?? null,
         ]);
         return (int)DB::conn()->lastInsertId();
     }
