@@ -22,7 +22,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation -->
+    <!-- Navigation ---->
     <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="mt-6 space-y-3">
-                        <a href="public/login?role=officer" class="w-full bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 block text-center">
+                        <a href="public/login?role=authority" class="w-full bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 block text-center">
                             Login as Officer
                         </a>
                         <p class="text-xs text-gray-500 text-center">

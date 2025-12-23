@@ -24,7 +24,7 @@ $router->get('/logout', [AuthController::class, 'logout']);
 // Authenticated routes
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/admin/dashboard', [DashboardController::class, 'adminDashboard']);
-$router->get('/officer/dashboard', [DashboardController::class, 'officerDashboard']);
+$router->get('/authority/dashboard', [DashboardController::class, 'authorityDashboard']);
 $router->get('/citizen/dashboard', [DashboardController::class, 'citizenDashboard']);
 $router->get('/complaints/new', [ComplaintController::class, 'create']);
 $router->post('/complaints', [ComplaintController::class, 'store']);
