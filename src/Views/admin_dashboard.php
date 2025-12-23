@@ -34,7 +34,7 @@
   </div>
   <div class="bg-white shadow p-4 rounded">
     <div class="text-gray-500">Authorities</div>
-    <div class="text-2xl font-bold text-green-600"><?= $stats['users']['officer'] ?? 0 ?></div>
+    <div class="text-2xl font-bold text-green-600"><?= $stats['users']['authority'] ?? 0 ?></div>
   </div>
   <div class="bg-white shadow p-4 rounded">
     <div class="text-gray-500">Admins</div>
