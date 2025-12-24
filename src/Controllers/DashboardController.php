@@ -42,7 +42,7 @@ class DashboardController
     public function authorityDashboard()
     {
         if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'authority') return redirect('/login');
-        $template = __DIR__ . '/../Views/officer_dashboard.php';
+        $template = __DIR__ . '/../Views/authority_dashboard.php';
         $user = $_SESSION['user'];
         $complaints = Complaint::listForRole($user['role'], $user['id']);
         $newComplaints = array_filter($complaints, fn($c) => $c['status'] === 'Submitted');
