@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/../src/bootstrap.php';
 
 use App\Core\Router;
+use App\Controllers\ApiController;
 use App\Controllers\AuthController;
 use App\Controllers\ComplaintController;
 use App\Controllers\DashboardController;

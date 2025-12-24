@@ -1,4 +1,8 @@
 -- MySQL schema for SM City - Perfect Complaint Management System
+-- MySQL schema for SM City
+drop database sm_city;
+create database sm_city;
+use sm_city;
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -74,3 +78,8 @@ CREATE TABLE IF NOT EXISTS complaint_logs (
   INDEX idx_logs_user (user_id),
   INDEX idx_logs_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- Default admin user: email: admin@smcity.com, password: admin
+INSERT INTO users (name, email, password, role) VALUES ('Administrator', 'admin@smcity.com', '$2y$10$2ck2gCMPAQso7sTBp85iyueZU7DW3fykESoKPeh.ij0WOb4euXCei', 'admin');
+-- Default authority user: email: authority@smcity.com, password: authority
+INSERT INTO users (name, email, password, role) VALUES ('Authority Officer', 'authority@smcity.com', '$2y$10$8yABu6DIV/RCZU7V3pjisulcHJSBi.g3gzwx8.qRG4OIqamrbDN5a', 'authority');
+

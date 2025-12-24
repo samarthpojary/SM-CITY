@@ -19,12 +19,18 @@ class AuthController
             return redirect('/login');
         }
 
-        $email = trim($_POST['email'] ?? '');
+        $email = sanitize_input($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
-        $requestedRole = $_POST['role'] ?? null;
+        $requestedRole = sanitize_input($_POST['role'] ?? '');
 
-        if (!$email || !$password) {
+        // Validation
+        if (!validate_required($email) || !validate_required($password)) {
             $_SESSION['flash'] = 'Email and password are required';
+            return redirect('/login' . ($requestedRole ? '?role=' . $requestedRole : ''));
+        }
+
+        if (!validate_email($email)) {
+            $_SESSION['flash'] = 'Please enter a valid email address';
             return redirect('/login' . ($requestedRole ? '?role=' . $requestedRole : ''));
         }
 
@@ -79,26 +85,26 @@ class AuthController
             return redirect('/register');
         }
 
-        $name = trim($_POST['name'] ?? '');
-        $email = trim($_POST['email'] ?? '');
+        $name = sanitize_input($_POST['name'] ?? '');
+        $email = sanitize_input($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         $confirmPassword = $_POST['confirm_password'] ?? '';
-        $phone = trim($_POST['phone'] ?? '');
-        $address = trim($_POST['address'] ?? '');
+        $phone = sanitize_input($_POST['phone'] ?? '');
+        $address = sanitize_input($_POST['address'] ?? '');
         $role = 'citizen'; // Only citizens can register through public form
 
         // Validation
-        if (!$name || !$email || !$password || !$confirmPassword) {
+        if (!validate_required($name) || !validate_required($email) || !validate_required($password) || !validate_required($confirmPassword)) {
             $_SESSION['flash'] = 'All fields are required';
             return redirect('/register');
         }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!validate_email($email)) {
             $_SESSION['flash'] = 'Please enter a valid email address';
             return redirect('/register');
         }
 
-        if (strlen($password) < 8) {
+        if (!validate_length($password, 8)) {
             $_SESSION['flash'] = 'Password must be at least 8 characters long';
             return redirect('/register');
         }

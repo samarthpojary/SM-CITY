@@ -15,6 +15,16 @@ class Router
         $this->map('POST', $path, $handler);
     }
 
+    public function put(string $path, callable|array $handler)
+    {
+        $this->map('PUT', $path, $handler);
+    }
+
+    public function delete(string $path, callable|array $handler)
+    {
+        $this->map('DELETE', $path, $handler);
+    }
+
     private function map(string $method, string $path, callable|array $handler)
     {
         $this->routes[] = compact('method', 'path', 'handler');
@@ -34,13 +44,38 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method && $route['path'] === $uri) {
-                return $this->invoke($route['handler']);
+            $params = [];
+            if ($this->matchRoute($route['path'], $uri, $params)) {
+                if ($route['method'] === $method) {
+                    return $this->invoke($route['handler'], $params);
+                }
             }
         }
 
         http_response_code(404);
         echo '404 Not Found';
+    }
+
+    private function matchRoute($routePath, $requestUri, &$params)
+    {
+        $routeParts = explode('/', trim($routePath, '/'));
+        $uriParts = explode('/', trim($requestUri, '/'));
+
+        if (count($routeParts) !== count($uriParts)) {
+            return false;
+        }
+
+        $params = [];
+        for ($i = 0; $i < count($routeParts); $i++) {
+            if (str_starts_with($routeParts[$i], '{') && str_ends_with($routeParts[$i], '}')) {
+                $paramName = trim($routeParts[$i], '{}');
+                $params[$paramName] = $uriParts[$i];
+            } elseif ($routeParts[$i] !== $uriParts[$i]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function invoke(callable|array $handler)

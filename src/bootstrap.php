@@ -81,3 +81,28 @@ function csrf_token() {
 function csrf_verify($token) {
     return isset($_SESSION['csrf']) && hash_equals($_SESSION['csrf'], $token);
 }
+
+// Caching functions
+function cache_get($key) {
+    $cacheFile = __DIR__ . '/../cache/' . md5($key) . '.cache';
+    if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < 3600)) { // 1 hour cache
+        return unserialize(file_get_contents($cacheFile));
+    }
+    return false;
+}
+
+function cache_set($key, $data, $ttl = 3600) {
+    $cacheDir = __DIR__ . '/../cache/';
+    if (!is_dir($cacheDir)) {
+        mkdir($cacheDir, 0755, true);
+    }
+    $cacheFile = $cacheDir . md5($key) . '.cache';
+    file_put_contents($cacheFile, serialize($data));
+}
+
+function cache_delete($key) {
+    $cacheFile = __DIR__ . '/../cache/' . md5($key) . '.cache';
+    if (file_exists($cacheFile)) {
+        unlink($cacheFile);
+    }
+}
