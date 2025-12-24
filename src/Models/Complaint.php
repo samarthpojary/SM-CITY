@@ -197,6 +197,17 @@ class Complaint
         ', ['complaint_id' => $complaintId]);
     }
 
+    public static function getAllFeedback(): array
+    {
+        return DB::fetchAll('
+            SELECT f.*, u.name as user_name, c.title as complaint_title, c.id as complaint_id
+            FROM feedback f
+            LEFT JOIN users u ON f.user_id = u.id
+            LEFT JOIN complaints c ON f.complaint_id = c.id
+            ORDER BY f.created_at DESC
+        ');
+    }
+
     // Logging methods
     public static function logAction(int $complaintId, int $userId, string $action, ?string $oldStatus = null, ?string $newStatus = null, ?string $notes = null): int
     {

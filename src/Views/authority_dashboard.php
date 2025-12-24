@@ -7,6 +7,50 @@ ait<?php $user = $user ?? $_SESSION['user']; $newComplaints = $newComplaints ?? 
   </div>
 </div>
 
+<!-- Feedback Section -->
+<div class="bg-white rounded shadow p-4 mt-6">
+  <h3 class="text-lg font-semibold mb-4">Feedback on Resolved Complaints</h3>
+  <?php
+  $resolvedComplaints = array_filter($solvedComplaints, fn($c) => $c['status'] === 'Resolved');
+  if (empty($resolvedComplaints)):
+  ?>
+    <p class="text-gray-500">No resolved complaints with feedback yet.</p>
+  <?php else: ?>
+    <div class="space-y-4">
+      <?php foreach ($resolvedComplaints as $c): ?>
+        <?php
+        $feedback = \App\Models\Complaint::getFeedback($c['id']);
+        if (!empty($feedback)):
+        ?>
+          <div class="border rounded p-4">
+            <div class="font-medium">#<?= $c['id'] ?> - <?= htmlspecialchars($c['title']) ?></div>
+            <div class="mt-2 space-y-2">
+              <?php foreach ($feedback as $f): ?>
+                <div class="bg-gray-50 p-3 rounded">
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">Citizen: <?= htmlspecialchars($f['user_name']) ?></span>
+                    <div class="flex items-center">
+                      <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <span class="<?= $i <= $f['rating'] ? 'text-yellow-400' : 'text-gray-300' ?>">★</span>
+                      <?php endfor; ?>
+                    </div>
+                  </div>
+                  <?php if ($f['comment']): ?>
+                    <p class="text-gray-700 mt-1"><?= nl2br(htmlspecialchars($f['comment'])) ?></p>
+                  <?php endif; ?>
+                  <div class="text-xs text-gray-500 mt-1">
+                    <?= date('M j, Y g:i A', strtotime($f['created_at'])) ?>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        <?php endif; ?>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
+</div>
+
 <div class="grid md:grid-cols-3 gap-6 mb-6">
   <div class="bg-white rounded shadow p-4">
     <h3 class="text-lg font-semibold mb-4">New Complaints</h3>

@@ -6,6 +6,51 @@ $logs = Complaint::getLogs($c['id']);
 $user = $_SESSION['user'] ?? null;
 ?>
 <div class="bg-white rounded shadow p-6">
+  <!-- Status Flow Indicator -->
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-4">Complaint Status Flow</h3>
+    <?php
+    $statuses = [
+      'Submitted' => 'gray',
+      'In Progress' => 'yellow',
+      'On Hold' => 'orange',
+      'Resolved' => 'green',
+      'Rejected' => 'red'
+    ];
+    $currentStatus = $c['status'];
+    $statusKeys = array_keys($statuses);
+    $currentIndex = array_search($currentStatus, $statusKeys);
+    ?>
+    <div class="flex items-center justify-between">
+      <?php foreach ($statuses as $status => $color): ?>
+        <?php
+        $index = array_search($status, $statusKeys);
+        $isCompleted = $index <= $currentIndex;
+        $isCurrent = $index === $currentIndex;
+        $bgColor = $isCompleted ? "bg-{$color}-500" : "bg-gray-300";
+        $textColor = $isCompleted ? "text-white" : "text-gray-500";
+        ?>
+        <div class="flex flex-col items-center">
+          <div class="relative">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center <?= $bgColor ?> <?= $textColor ?> font-semibold text-sm">
+              <?php if ($isCompleted && !$isCurrent): ?>
+                ✓
+              <?php else: ?>
+                <?= $index + 1 ?>
+              <?php endif; ?>
+            </div>
+            <?php if ($index < count($statuses) - 1): ?>
+              <div class="absolute top-5 left-10 w-16 h-0.5 <?= $index < $currentIndex ? "bg-{$color}-500" : "bg-gray-300" ?>"></div>
+            <?php endif; ?>
+          </div>
+          <span class="text-xs mt-2 text-center <?= $isCurrent ? "font-semibold text-{$color}-600" : "text-gray-600" ?>">
+            <?= $status ?>
+          </span>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
   <div class="flex justify-between items-start">
     <div>
       <h2 class="text-2xl font-semibold mb-1">#<?= $c['id'] ?> - <?= htmlspecialchars($c['title']) ?></h2>

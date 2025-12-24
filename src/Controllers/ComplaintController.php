@@ -112,10 +112,7 @@ class ComplaintController
 
         // Check if authority is assigned to this complaint or if admin
         $user = $_SESSION['user'];
-        if ($user['role'] === 'authority' && $complaint['assigned_authority_id'] != $user['id']) {
-            $_SESSION['flash'] = 'You are not authorized to update this complaint.';
-            return redirect('/complaints/view?id=' . $id);
-        }
+        // Allow authorities to update any complaint (removed assignment check)
 
         if (Complaint::updateStatus($id, $status, $user['id'])) {
             $_SESSION['flash'] = 'Complaint status updated successfully.';
@@ -150,10 +147,7 @@ class ComplaintController
 
         // Check authorization
         $user = $_SESSION['user'];
-        if ($user['role'] === 'authority' && $complaint['assigned_authority_id'] != $user['id']) {
-            $_SESSION['flash'] = 'You are not authorized to resolve this complaint.';
-            return redirect('/complaints/view?id=' . $id);
-        }
+        // Allow authorities to resolve any complaint (removed assignment check)
 
         // Handle file upload for evidence
         if (isset($_FILES['evidence']) && $_FILES['evidence']['error'] === UPLOAD_ERR_OK) {

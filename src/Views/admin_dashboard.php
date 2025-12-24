@@ -44,97 +44,161 @@
 
 <!-- Users Management -->
 <div class="bg-white rounded shadow p-4 mb-6">
-  <h3 class="text-lg font-semibold mb-4">All Users</h3>
-  <div class="overflow-x-auto">
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="border-b">
-          <th class="text-left p-2">ID</th>
-          <th class="text-left p-2">Name</th>
-          <th class="text-left p-2">Email</th>
-          <th class="text-left p-2">Role</th>
-          <th class="text-left p-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($users as $u): ?>
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-semibold">All Users</h3>
+    <button onclick="toggleSection('users')" class="bg-blue-600 text-white px-4 py-2 rounded text-sm" id="users-toggle">Show</button>
+  </div>
+  <div id="users-content" class="hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
           <tr class="border-b">
-            <td class="p-2"><?= $u['id'] ?></td>
-            <td class="p-2"><?= htmlspecialchars($u['name']) ?></td>
-            <td class="p-2"><?= htmlspecialchars($u['email']) ?></td>
-            <td class="p-2"><?= htmlspecialchars($u['role']) ?></td>
-            <td class="p-2 space-x-2">
-              <a href="<?= $base ?>/admin/edit-user?id=<?= $u['id'] ?>" class="text-blue-600 hover:underline">Edit</a>
-              <a href="<?= $base ?>/admin/delete-user?id=<?= $u['id'] ?>" class="text-red-600 hover:underline" onclick="return confirm('Delete user?')">Delete</a>
-            </td>
+            <th class="text-left p-2">ID</th>
+            <th class="text-left p-2">Name</th>
+            <th class="text-left p-2">Email</th>
+            <th class="text-left p-2">Role</th>
+            <th class="text-left p-2">Actions</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($users as $u): ?>
+            <tr class="border-b">
+              <td class="p-2"><?= $u['id'] ?></td>
+              <td class="p-2"><?= htmlspecialchars($u['name']) ?></td>
+              <td class="p-2"><?= htmlspecialchars($u['email']) ?></td>
+              <td class="p-2"><?= htmlspecialchars($u['role']) ?></td>
+              <td class="p-2 space-x-2">
+                <a href="<?= $base ?>/admin/edit-user?id=<?= $u['id'] ?>" class="text-blue-600 hover:underline">Edit</a>
+                <a href="<?= $base ?>/admin/delete-user?id=<?= $u['id'] ?>" class="text-red-600 hover:underline" onclick="return confirm('Delete user?')">Delete</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <!-- Authorities Management -->
 <div class="bg-white rounded shadow p-4 mb-6">
-  <h3 class="text-lg font-semibold mb-4">All Authorities</h3>
-  <div class="overflow-x-auto">
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="border-b">
-          <th class="text-left p-2">ID</th>
-          <th class="text-left p-2">Name</th>
-          <th class="text-left p-2">Email</th>
-          <th class="text-left p-2">Role</th>
-          <th class="text-left p-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($authorities as $a): ?>
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-semibold">All Authorities</h3>
+    <button onclick="toggleSection('authorities')" class="bg-blue-600 text-white px-4 py-2 rounded text-sm" id="authorities-toggle">Show</button>
+  </div>
+  <div id="authorities-content" class="hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
           <tr class="border-b">
-            <td class="p-2"><?= $a['id'] ?></td>
-            <td class="p-2"><?= htmlspecialchars($a['name']) ?></td>
-            <td class="p-2"><?= htmlspecialchars($a['email']) ?></td>
-            <td class="p-2"><?= htmlspecialchars($a['role']) ?></td>
-            <td class="p-2 space-x-2">
-              <a href="<?= $base ?>/admin/edit-user?id=<?= $a['id'] ?>" class="text-blue-600 hover:underline">Edit</a>
-              <a href="<?= $base ?>/admin/delete-user?id=<?= $a['id'] ?>" class="text-red-600 hover:underline" onclick="return confirm('Delete authority?')">Delete</a>
-            </td>
+            <th class="text-left p-2">ID</th>
+            <th class="text-left p-2">Name</th>
+            <th class="text-left p-2">Email</th>
+            <th class="text-left p-2">Role</th>
+            <th class="text-left p-2">Actions</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($authorities as $a): ?>
+            <tr class="border-b">
+              <td class="p-2"><?= $a['id'] ?></td>
+              <td class="p-2"><?= htmlspecialchars($a['name']) ?></td>
+              <td class="p-2"><?= htmlspecialchars($a['email']) ?></td>
+              <td class="p-2"><?= htmlspecialchars($a['role']) ?></td>
+              <td class="p-2 space-x-2">
+                <a href="<?= $base ?>/admin/edit-user?id=<?= $a['id'] ?>" class="text-blue-600 hover:underline">Edit</a>
+                <a href="<?= $base ?>/admin/delete-user?id=<?= $a['id'] ?>" class="text-red-600 hover:underline" onclick="return confirm('Delete authority?')">Delete</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <!-- All Complaints -->
-<div class="bg-white rounded shadow p-4">
-  <h3 class="text-lg font-semibold mb-4">All Complaints</h3>
-  <div class="overflow-x-auto">
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="border-b">
-          <th class="text-left p-2">ID</th>
-          <th class="text-left p-2">Title</th>
-          <th class="text-left p-2">User</th>
-          <th class="text-left p-2">Status</th>
-          <th class="text-left p-2">Priority</th>
-          <th class="text-left p-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($allComplaints as $c): ?>
+<div class="bg-white rounded shadow p-4 mb-6">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-semibold">All Complaints</h3>
+    <button onclick="toggleSection('complaints')" class="bg-blue-600 text-white px-4 py-2 rounded text-sm" id="complaints-toggle">Show</button>
+  </div>
+  <div id="complaints-content" class="hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
           <tr class="border-b">
-            <td class="p-2">#<?= $c['id'] ?></td>
-            <td class="p-2"><?= htmlspecialchars($c['title']) ?></td>
-            <td class="p-2"><?= htmlspecialchars($c['user_name'] ?? 'Unknown') ?></td>
-            <td class="p-2"><?= htmlspecialchars($c['status']) ?></td>
-            <td class="p-2"><?= htmlspecialchars($c['priority']) ?></td>
-            <td class="p-2">
-              <a href="<?= $base ?>/complaints/view?id=<?= $c['id'] ?>" class="text-blue-600 hover:underline">View</a>
-            </td>
+            <th class="text-left p-2">ID</th>
+            <th class="text-left p-2">Title</th>
+            <th class="text-left p-2">User</th>
+            <th class="text-left p-2">Status</th>
+            <th class="text-left p-2">Priority</th>
+            <th class="text-left p-2">Actions</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($allComplaints as $c): ?>
+            <tr class="border-b">
+              <td class="p-2">#<?= $c['id'] ?></td>
+              <td class="p-2"><?= htmlspecialchars($c['title']) ?></td>
+              <td class="p-2"><?= htmlspecialchars($c['user_name'] ?? 'Unknown') ?></td>
+              <td class="p-2"><?= htmlspecialchars($c['status']) ?></td>
+              <td class="p-2"><?= htmlspecialchars($c['priority']) ?></td>
+              <td class="p-2">
+                <a href="<?= $base ?>/complaints/view?id=<?= $c['id'] ?>" class="text-blue-600 hover:underline">View</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+<!-- Feedback Section -->
+<div class="bg-white rounded shadow p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-semibold">All Feedback</h3>
+    <button onclick="toggleSection('feedback')" class="bg-blue-600 text-white px-4 py-2 rounded text-sm" id="feedback-toggle">Show</button>
+  </div>
+  <div id="feedback-content" class="hidden">
+    <?php if (empty($allFeedback)): ?>
+      <p class="text-gray-500">No feedback submitted yet.</p>
+    <?php else: ?>
+      <div class="space-y-4">
+        <?php foreach ($allFeedback as $f): ?>
+          <div class="border rounded p-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-medium">Complaint #<?= $f['complaint_id'] ?> - <?= htmlspecialchars($f['complaint_title']) ?></span>
+              <div class="flex items-center">
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                  <span class="<?= $i <= $f['rating'] ? 'text-yellow-400' : 'text-gray-300' ?>">★</span>
+                <?php endfor; ?>
+              </div>
+            </div>
+            <div class="text-sm text-gray-600 mb-2">
+              By: <?= htmlspecialchars($f['user_name']) ?> | Submitted: <?= date('M j, Y g:i A', strtotime($f['created_at'])) ?>
+            </div>
+            <?php if ($f['comment']): ?>
+              <p class="text-gray-700 bg-gray-50 p-2 rounded"><?= nl2br(htmlspecialchars($f['comment'])) ?></p>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
+</div>
+
+<script>
+function toggleSection(section) {
+  const content = document.getElementById(section + '-content');
+  const button = document.getElementById(section + '-toggle');
+
+  if (content.classList.contains('hidden')) {
+    content.classList.remove('hidden');
+    button.textContent = 'Hide';
+  } else {
+    content.classList.add('hidden');
+    button.textContent = 'Show';
+  }
+}
+</script>

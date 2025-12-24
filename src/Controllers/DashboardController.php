@@ -35,7 +35,8 @@ class DashboardController
         $users = User::allByRole('citizen');
         $authorities = User::allByRole(['authority', 'admin']);
         $allComplaints = Complaint::allWithUsers();
-        view($template, ['title' => 'Admin Dashboard', 'user' => $user, 'stats' => $stats, 'users' => $users, 'authorities' => $authorities, 'allComplaints' => $allComplaints], 'dashboard_layout.php');
+        $allFeedback = Complaint::getAllFeedback();
+        view($template, ['title' => 'Admin Dashboard', 'user' => $user, 'stats' => $stats, 'users' => $users, 'authorities' => $authorities, 'allComplaints' => $allComplaints, 'allFeedback' => $allFeedback], 'dashboard_layout.php');
     }
 
     public function authorityDashboard()
