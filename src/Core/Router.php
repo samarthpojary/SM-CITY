@@ -22,7 +22,7 @@ class Router
 
     public function dispatch()
     {
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = isset($_SERVER['REQUEST_URI']) ? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) : '/';
         $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
         error_log("REQUEST_URI: $uri");
         error_log("SCRIPT_NAME: " . $_SERVER['SCRIPT_NAME']);
