@@ -106,3 +106,20 @@ function cache_delete($key) {
         unlink($cacheFile);
     }
 }
+
+// Input sanitization and validation helpers
+function sanitize_input($input) {
+    return trim(htmlspecialchars($input, ENT_QUOTES, 'UTF-8'));
+}
+
+function validate_required($input) {
+    return !empty(trim($input));
+}
+
+function validate_email($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+function validate_length($input, $minLength) {
+    return strlen($input) >= $minLength;
+}

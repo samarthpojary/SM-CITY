@@ -18,7 +18,19 @@
     </div>
     <div>
       <label class="block text-sm mb-1">Password</label>
-      <input class="w-full border rounded px-3 py-2" type="password" name="password" required minlength="6" />
+      <input class="w-full border rounded px-3 py-2" type="password" name="password" required minlength="8" />
+    </div>
+    <div>
+      <label class="block text-sm mb-1">Confirm Password</label>
+      <input class="w-full border rounded px-3 py-2" type="password" name="confirm_password" required />
+    </div>
+    <div>
+      <label class="block text-sm mb-1">Phone</label>
+      <input class="w-full border rounded px-3 py-2" type="tel" name="phone" />
+    </div>
+    <div>
+      <label class="block text-sm mb-1">Address</label>
+      <textarea class="w-full border rounded px-3 py-2" name="address" rows="3"></textarea>
     </div>
     <button class="bg-green-600 text-white px-4 py-2 rounded w-full" type="submit">Create Citizen Account</button>
   </form>
