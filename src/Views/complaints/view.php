@@ -14,9 +14,33 @@ $user = $_SESSION['user'] ?? null;
   </a>
 </div>
 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-  <!-- Status Flow Indicator -->
+  <!-- Tab Navigation -->
   <div class="mb-6">
-    <h3 class="text-lg font-semibold mb-4">Complaint Status Flow</h3>
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex space-x-8">
+        <button class="tab-button border-b-2 border-blue-500 py-2 px-1 text-sm font-medium text-blue-600" data-tab="overview">Overview</button>
+        <button class="tab-button border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="details">Details</button>
+        <button class="tab-button border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="actions">Actions</button>
+        <?php if ($c['status'] === 'Resolved'): ?>
+          <button class="tab-button border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="feedback">Feedback</button>
+        <?php endif; ?>
+        <?php if (!empty($logs)): ?>
+          <button class="tab-button border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="logs">Activity Log</button>
+        <?php endif; ?>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Overview Tab -->
+  <div id="overview-tab" class="tab-content">
+    <!-- Status Flow Indicator -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-4 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+        </svg>
+        Complaint Status Flow
+      </h3>
     <?php
     $statuses = [
       'Submitted' => 'gray',
@@ -60,6 +84,9 @@ $user = $_SESSION['user'] ?? null;
   </div>
 
   <div class="flex justify-between items-start">
+  <div id="details-tab" class="tab-content hidden">
+    <div class="space-y-6">
+      <div class="flex justify-between items-start">
     <div>
       <h2 class="text-2xl font-semibold mb-1">#<?= $c['id'] ?> - <?= htmlspecialchars($c['title']) ?></h2>
       <div class="text-gray-600 mb-2">
@@ -103,63 +130,82 @@ $user = $_SESSION['user'] ?? null;
     </div>
   <?php endif; ?>
 
-  <!-- Admin Actions -->
-  <?php if ($user && $user['role'] === 'admin'): ?>
-  <div class="border-t pt-4 mt-4">
-    <h3 class="font-semibold mb-3">Admin Actions</h3>
+    <div class="space-y-6">
+      <!-- Admin Actions -->
+      <?php if ($user && $user['role'] === 'admin'): ?>
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <h3 class="font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            Admin Actions
+          </h3>
 
-    <!-- Authority Assignment -->
-    <form method="POST" action="<?= $base ?>/complaints/assign-authority" class="flex items-end gap-3 mb-4">
-      <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
-      <input type="hidden" name="complaint_id" value="<?= $c['id'] ?>" />
-      <div>
-        <label class="block text-sm mb-1">Assign to Authority</label>
-        <select name="authority_id" class="border rounded px-3 py-2">
-          <option value="">Select Authority</option>
-          <?php
-          $authorities = \App\Models\User::allByRole('authority');
-          foreach ($authorities as $auth): ?>
-            <option value="<?= $auth['id'] ?>" <?= ($c['assigned_authority_id'] == $auth['id']) ? 'selected' : '' ?>>
-              <?= htmlspecialchars($auth['name']) ?> (<?= htmlspecialchars($auth['email']) ?>)
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <button class="bg-purple-600 text-white px-4 py-2 rounded" type="submit">Assign</button>
-    </form>
+          <!-- Authority Assignment -->
+          <form method="POST" action="<?= $base ?>/complaints/assign-authority" class="flex flex-col sm:flex-row items-end gap-3">
+            <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
+            <input type="hidden" name="complaint_id" value="<?= $c['id'] ?>" />
+            <div class="flex-1">
+              <label class="block text-sm font-medium mb-2">Assign to Authority</label>
+              <select name="authority_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                <option value="">Select Authority</option>
+                <?php
+                $authorities = \App\Models\User::allByRole('authority');
+                foreach ($authorities as $auth): ?>
+                  <option value="<?= $auth['id'] ?>" <?= ($c['assigned_authority_id'] == $auth['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($auth['name']) ?> (<?= htmlspecialchars($auth['email']) ?>)
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200" type="submit">Assign Authority</button>
+          </form>
+        </div>
+      <?php endif; ?>
+
+      <!-- Authority Actions -->
+      <?php if ($user && $user['role'] === 'authority' && $c['assigned_authority_id'] == $user['id']): ?>
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <h3 class="font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+            Authority Actions
+          </h3>
+
+          <div class="space-y-4">
+            <form method="POST" action="<?= $base ?>/complaints/update-status" class="flex flex-col sm:flex-row items-end gap-3">
+              <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
+              <input type="hidden" name="id" value="<?= $c['id'] ?>" />
+              <div class="flex-1">
+                <label class="block text-sm font-medium mb-2">Update Status</label>
+                <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                  <?php foreach (['Submitted','In Progress','On Hold','Resolved','Rejected'] as $s): ?>
+                    <option value="<?= $s ?>" <?= $c['status']===$s?'selected':'' ?>><?= $s ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200" type="submit">Update Status</button>
+            </form>
+
+            <form method="POST" action="<?= $base ?>/complaints/resolve" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-end gap-3">
+              <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
+              <input type="hidden" name="id" value="<?= $c['id'] ?>" />
+              <div class="flex-1">
+                <label class="block text-sm font-medium mb-2">Resolution Evidence</label>
+                <input type="file" name="evidence" accept="image/*" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+              </div>
+              <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200" type="submit">Mark Resolved</button>
+            </form>
+          </div>
+        </div>
+      <?php endif; ?>
+    </div>
   </div>
-  <?php endif; ?>
 
-  <!-- Authority Actions -->
-  <?php if ($user && $user['role'] === 'authority' && $c['assigned_authority_id'] == $user['id']): ?>
-  <div class="border-t pt-4 mt-4">
-    <h3 class="font-semibold mb-3">Authority Actions</h3>
-
-    <form method="POST" action="<?= $base ?>/complaints/update-status" class="flex items-end gap-3 mb-4">
-      <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
-      <input type="hidden" name="id" value="<?= $c['id'] ?>" />
-      <div>
-        <label class="block text-sm mb-1">Update Status</label>
-        <select name="status" class="border rounded px-3 py-2">
-          <?php foreach (['Submitted','In Progress','On Hold','Resolved','Rejected'] as $s): ?>
-            <option value="<?= $s ?>" <?= $c['status']===$s?'selected':'' ?>><?= $s ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <button class="bg-indigo-600 text-white px-4 py-2 rounded" type="submit">Update</button>
-    </form>
-
-    <form method="POST" action="<?= $base ?>/complaints/resolve" enctype="multipart/form-data" class="flex items-end gap-3">
-      <input type="hidden" name="csrf" value="<?= csrf_token() ?>" />
-      <input type="hidden" name="id" value="<?= $c['id'] ?>" />
-      <div>
-        <label class="block text-sm mb-1">Resolution Evidence</label>
-        <input type="file" name="evidence" accept="image/*" />
-      </div>
-      <button class="bg-green-600 text-white px-4 py-2 rounded" type="submit">Mark Resolved</button>
-    </form>
-  </div>
-  <?php endif; ?>
+  <!-- Feedback Tab -->
+  <?php if ($c['status'] === 'Resolved'): ?>
+  <div id="feedback-tab" class="tab-content hidden">
 
   <!-- Feedback Section -->
   <?php if ($c['status'] === 'Resolved'): ?>
@@ -251,3 +297,32 @@ $user = $_SESSION['user'] ?? null;
   <?php endif; ?>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active classes
+      tabButtons.forEach(btn => {
+        btn.classList.remove('border-blue-500', 'text-blue-600');
+        btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+      });
+      tabContents.forEach(content => content.classList.add('hidden'));
+
+      // Add active class to clicked button
+      button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+      button.classList.add('border-blue-500', 'text-blue-600');
+
+      // Show corresponding tab content
+      const tabId = button.dataset.tab + '-tab';
+      const tabContent = document.getElementById(tabId);
+      if (tabContent) {
+        tabContent.classList.remove('hidden');
+      }
+    });
+  });
+});
+</script>
