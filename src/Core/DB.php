@@ -15,7 +15,7 @@ class DB
             $port = env('DB_PORT', 3306);
             $dbname = env('DB_NAME', 'sm_city');
             $user = env('DB_USER', 'root');
-            $pass = env('DB_PASS', 'Samarth@9019');
+            $pass = env('DB_PASS', '');
 
             $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4";
 
