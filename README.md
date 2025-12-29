@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # AI-Powered Smart City Complaint & Issue Resolution System
 
 ## Setup Instructions
