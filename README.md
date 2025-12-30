@@ -1,5 +1,8 @@
 AI-Powered Smart City Complaint & Issue Resolution System
 
+<h1>DEVELOPED BY SAMARTH P<br>
+GITHUB  LINK :https://github.com/samarthpojary/</h1>
+
 Features Implemented:
 
 - User authentication (Citizens, Officers, Admins)
