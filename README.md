@@ -3,7 +3,7 @@ AI-Powered Smart City Complaint & Issue Resolution System
 <h1>DEVELOPED BY SAMARTH P<br>
 GITHUB  LINK :https://github.com/samarthpojary/</h1>
 
-Features Implemented:
+Features Implemented:-
 
 - User authentication (Citizens, Officers, Admins)
 - Complaint submission with image upload and location
@@ -12,7 +12,7 @@ Features Implemented:
 - Complaint tracking and status updates
 - Authority operations (status updates, resolution with evidence)
 
-API Keys Required:
+API Keys Required:-
 
 - **OpenAI API Key**: For intelligent complaint categorization
   - Get from: https://platform.openai.com/api-keys
@@ -44,7 +44,7 @@ SM-City/
 └── README.md               # This file
 ```
 
-Technologies Used:
+Technologies Used:-
 
 - **Backend**: PHP 8+, MySQL
 - **Frontend**: HTML5, TailwindCSS, JavaScript
@@ -52,7 +52,7 @@ Technologies Used:
 - **AI**: OpenAI GPT API
 - **Security**: CSRF protection, password hashing
 
-### Development Notes
+### Development Notes:
 
 - The system uses MVC architecture
 - AI classification falls back to keyword matching if OpenAI API is unavailable
@@ -60,7 +60,7 @@ Technologies Used:
 - Sessions handle user authentication
 - PDO for database interactions
 
-### Future Enhancements
+### Future Enhancements:-
 
 - Mobile app integration
 - Advanced duplicate detection
